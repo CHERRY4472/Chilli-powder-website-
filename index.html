@@ -1,0 +1,63 @@
+import { useEffect } from "react";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Marquee from "./components/Marquee";
+import Story from "./components/Story";
+import ChilliOrder from "./components/ChilliOrder";
+import Process from "./components/Process";
+import Faq from "./components/Faq";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
+import { DEFAULT_ORDER_MESSAGE, whatsappLink } from "./data";
+import { WhatsAppIcon } from "./components/ui";
+
+export default function App() {
+  useEffect(() => {
+    const items = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
+    if (!items.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-cream">
+      <a
+        href="#home"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-maroon-900 focus:px-4 focus:py-2 focus:text-xs focus:font-bold focus:text-cream"
+      >
+        Skip to content
+      </a>
+
+      <Header />
+
+      <main>
+        <Hero />
+        <Marquee />
+        <Story />
+        <ChilliOrder />
+        <Process />
+        <Faq />
+        <Contact />
+      </main>
+
+      <Footer />
+
+      {/* persistent order shortcut */}
